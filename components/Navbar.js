@@ -83,7 +83,26 @@ export default function Navbar() {
     <Link href="/" onClick={() => setIsMenuOpen(false)} className="text-4xl font-black italic text-white">HOME</Link>
     <Link href="/classes" onClick={() => setIsMenuOpen(false)} className="text-4xl font-black italic text-white">CLASSES</Link>
     <Link href="/membership" onClick={() => setIsMenuOpen(false)} className="text-4xl font-black italic text-white">MEMBERSHIP</Link>
-    <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="bg-orange-500 text-black px-10 py-4 rounded-full text-xl font-black italic">THE VAULT</Link>
+   {user ? (
+  <button 
+    onClick={async () => {
+      await supabase.auth.signOut();
+      setIsMenuOpen(false);
+      window.location.href = '/login'
+    }} 
+    className="text-4xl font-black uppercase italic text-orange-500 mt-4"
+  >
+    EXIT VAULT
+  </button>
+) : (
+  <Link 
+    href="/profile" 
+    onClick={() => setIsMenuOpen(false)} 
+    className="border-2 border-orange-500 text-orange-500 px-8 py-3 rounded-full text-xl font-black uppercase italic mt-4"
+  >
+    THE VAULT
+  </Link>
+)}
   </div>
 )}
     </nav>

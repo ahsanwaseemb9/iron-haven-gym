@@ -3,8 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { TrendingUp, Activity, Clock, Zap, ChevronRight, Dumbbell, Calendar, User } from 'lucide-react';
 import Link from 'next/link';
+import LogWorkout from '@/app/log-workout/page';
+import ReviewForm from '@/components/ReviewForm'; 
+import { useRouter } from 'next/navigation';
+
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [workouts, setWorkouts] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -42,7 +47,16 @@ export default function ProfilePage() {
       setLoading(false);
     };
     fetchData();
-  }, []);
+    
+    return () => {
+    const autoLogout = async () => {
+      await supabase.auth.signOut();
+      router.refresh(); // Forces the Navbar to flip back to "Login"
+    };
+    autoLogout();
+  };
+},
+   [supabase, router]);
 
   const totalCalories = workouts.reduce((acc, curr) => acc + (curr.calories || 0), 0);
   const powerScore = 500 + (workouts.length * 100) + Math.floor(totalCalories * 0.1);
@@ -57,7 +71,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-black text-white pt-32 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
         
-        <div className="mb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <h1 className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter">
             THE <span className="text-orange-500">VAULT</span>
           </h1>
@@ -120,6 +134,27 @@ export default function ProfilePage() {
 
         </div>
       </div>
+{/* Vertical Stack Container */}
+<div className="flex flex-col gap-6 mt-12 max-w-[800px] mx-auto px-4">
+  
+  {/* 1. Performance Log - Rectangular */}
+  <section className="border border-zinc-800 rounded-xl p-5 w-full bg-zinc-900/20">
+    <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 mb-4">
+      Performance Tracking
+    </h3>
+    <LogWorkout user={user} />
+  </section>
+
+  {/* 2. Review Form - Rectangular */}
+  <section className="border border-zinc-800 rounded-xl p-5 w-full bg-zinc-900/20">
+    <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 mb-4">
+      Member Feedback
+    </h3>
+    <ReviewForm />
+  </section>
+
+</div>
     </div>
+
   );
 }
