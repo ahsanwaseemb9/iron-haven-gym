@@ -12,9 +12,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-black">
+      <body className={`${inter.className} bg-black antialiased`}>
+        {/* The Navbar is now its own responsive component */}
         <Navbar />
-        {children}
+
+        {/* Padding-top (pt-20) ensures content starts below the navbar */}
+        <main className="pt-20"> 
+          {children}
+        </main>
       </body>
     </html>
   );

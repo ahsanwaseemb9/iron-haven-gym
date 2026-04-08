@@ -5,7 +5,6 @@ import { saveLead } from './actions';
 import { Trophy, Users, CheckCircle2, Zap, Star, Quote } from 'lucide-react';
 import Testimonials from '@/components/Testimonials'; // Import your new component
 
-
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
