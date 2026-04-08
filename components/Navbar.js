@@ -8,6 +8,8 @@ import { supabase } from '@/lib/supabase'
 export default function Navbar() {
   const [user, setUser] = useState(null)
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => setUser(user))
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -44,7 +46,7 @@ export default function Navbar() {
         </div>
 
         {/* RIGHT GROUP: AUTH */}
-        <div className="flex items-center gap-3">
+        <div className="hidden md:flex flex items-center gap-3">
           {user ? (
             <>
               <Link href="/profile" className="flex items-center gap-2 bg-zinc-900 px-4 py-2 rounded-xl text-[10px] font-black uppercase text-white border border-zinc-800 hover:border-orange-500 transition-all">
@@ -67,6 +69,23 @@ export default function Navbar() {
         </div>
 
       </div>
+      {/* Mobile Hamburger Button */}
+<button 
+  className="md:hidden text-white absolute right-6 top-5 z-[110]" 
+  onClick={() => setIsMenuOpen(!isMenuOpen)}
+>
+  {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+</button>
+
+{/* Mobile Menu Overlay */}
+{isMenuOpen && (
+  <div className="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center gap-8 md:hidden">
+    <Link href="/" onClick={() => setIsMenuOpen(false)} className="text-4xl font-black italic text-white">HOME</Link>
+    <Link href="/classes" onClick={() => setIsMenuOpen(false)} className="text-4xl font-black italic text-white">CLASSES</Link>
+    <Link href="/membership" onClick={() => setIsMenuOpen(false)} className="text-4xl font-black italic text-white">MEMBERSHIP</Link>
+    <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="bg-orange-500 text-black px-10 py-4 rounded-full text-xl font-black italic">THE VAULT</Link>
+  </div>
+)}
     </nav>
   )
 }
