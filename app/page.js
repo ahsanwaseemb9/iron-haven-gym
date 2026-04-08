@@ -1,4 +1,5 @@
 'use client'
+import Navbar from '@/components/Navbar';
 import React, { useActionState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
 import { saveLead } from './actions';
