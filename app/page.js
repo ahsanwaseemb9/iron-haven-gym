@@ -6,18 +6,6 @@ import { saveLead } from './actions';
 import { Trophy, Users, CheckCircle2, Zap, Star, Quote } from 'lucide-react';
 import Testimonials from '@/components/Testimonials'; // Import your new component
 
-export default function LandingPage() {
-  return (
-    <div className="min-h-screen bg-black text-white">
-      <Navbar /> {/* This is the only line you need for the nav! */}
-      
-      {/* Remove any other <nav> tags here */}
-      <section className="pt-40 pb-20 px-6">
-        {/* Hero content... */}
-      </section>
-    </div>
-  );
-}
 
 function SubmitButton() {
   const { pending } = useFormStatus();
