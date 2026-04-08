@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { Zap, Menu, X } from 'lucide-react';
 import { Dumbbell, Home, ShieldCheck, LogOut } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
