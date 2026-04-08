@@ -1,48 +1,95 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Zap, Menu, X } from 'lucide-react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+  const supabase = createClientComponentClient();
+
+  // Check if user is logged in
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+
+    // Listen for changes (login/logout)
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [supabase]);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.refresh();
+    setIsOpen(false);
+  };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-[999] bg-black border-b border-zinc-800 px-6 py-4">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <nav className="fixed top-0 left-0 w-full z-[9999] bg-black border-b border-zinc-800">
+      <div className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
         
-        {/* LOGO - FORCED LEFT */}
-        <Link href="/" className="flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
-          <Zap className="text-orange-500" fill="currentColor" size={24} />
-          <span className="text-xl font-black uppercase italic tracking-tighter text-white">Iron Haven</span>
+        {/* LOGO */}
+        <Link href="/" className="flex items-center gap-2 text-white">
+          <Zap className="text-orange-500" fill="currentColor" />
+          <span className="font-black uppercase italic tracking-tighter text-white">Iron Haven</span>
         </Link>
 
-        {/* DESKTOP LINKS - FORCED RIGHT */}
-        <div className="hidden md:flex items-center gap-8">
-          <Link href="/classes" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white">Classes</Link>
-          <Link href="/membership" className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white">Membership</Link>
-          <Link href="/profile" className="bg-orange-500 text-black px-5 py-2 rounded-full text-[10px] font-black uppercase italic hover:bg-white transition-all">
-            The Vault
-          </Link>
-        </div>
-
-        {/* MOBILE BUTTON - FORCED RIGHT */}
-        <button 
-          className="md:hidden text-white p-2"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        {/* MOBILE TOGGLE */}
+        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-white">
+          {isOpen ? <X size={30} /> : <Menu size={30} />}
         </button>
 
-        {/* MOBILE OVERLAY */}
-        <div className={`fixed inset-0 bg-black flex flex-col items-center justify-center gap-8 transition-transform duration-300 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden`}>
-          <Link href="/" onClick={() => setIsMenuOpen(false)} className="text-4xl font-black uppercase italic">Home</Link>
-          <Link href="/classes" onClick={() => setIsMenuOpen(false)} className="text-4xl font-black uppercase italic">Classes</Link>
-          <Link href="/membership" onClick={() => setIsMenuOpen(false)} className="text-4xl font-black uppercase italic">Membership</Link>
-          <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="bg-orange-500 text-black px-10 py-4 rounded-full text-xl font-black uppercase italic">The Vault</Link>
+        {/* DESKTOP LINKS */}
+        <div className="hidden md:flex items-center gap-6 text-[10px] font-bold uppercase italic tracking-widest">
+          <Link href="/classes" className="text-zinc-400 hover:text-white">Classes</Link>
           
-          {/* Close button inside overlay */}
-          <button onClick={() => setIsMenuOpen(false)} className="mt-10 text-zinc-500 uppercase text-xs tracking-widest font-bold">Close Menu</button>
+          {user ? (
+            <button 
+              onClick={handleSignOut}
+              className="bg-zinc-800 text-white px-4 py-2 rounded-full hover:bg-white hover:text-black transition-all"
+            >
+              Sign Out
+            </button>
+          ) : (
+            <Link href="/profile" className="bg-orange-500 text-black px-4 py-2 rounded-full hover:bg-white transition-all">
+              Login
+            </Link>
+          )}
         </div>
+
+        {/* MOBILE MENU */}
+        {isOpen && (
+          <div className="fixed inset-0 bg-black flex flex-col items-center justify-center gap-8 md:hidden">
+            <Link href="/" onClick={() => setIsOpen(false)} className="text-3xl font-black italic">HOME</Link>
+            <Link href="/classes" onClick={() => setIsOpen(false)} className="text-3xl font-black italic">CLASSES</Link>
+            
+            {user ? (
+              <button 
+                onClick={handleSignOut}
+                className="text-3xl font-black italic text-orange-500"
+              >
+                SIGN OUT
+              </button>
+            ) : (
+              <Link href="/profile" onClick={() => setIsOpen(false)} className="bg-orange-500 text-black px-8 py-4 rounded-full text-xl font-black italic">
+                LOGIN
+              </Link>
+            )}
+            
+            <button onClick={() => setIsOpen(false)} className="text-zinc-500 text-xs mt-10">CLOSE</button>
+          </div>
+        )}
       </div>
     </nav>
   );
