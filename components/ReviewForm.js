@@ -9,18 +9,7 @@ export default function ReviewForm() {
 
   return (
     <div className="space-y-6">
-      {/* POWER SCORE FORMULA CARD */}
-      <div className="bg-orange-500/5 border border-orange-500/20 p-6 rounded-[2rem]">
-        <div className="flex items-center gap-2 mb-3 text-orange-500">
-          <Info size={16} />
-          <span className="text-[10px] font-black uppercase tracking-[0.2em]">The Power Formula</span>
-        </div>
-        <p className="text-[11px] text-zinc-400 leading-relaxed font-medium">
-          <span className="text-white font-bold">Score</span> = (Duration × Intensity) + (Calories × 0.1)
-          <br />
-          <span className="text-zinc-600 italic mt-1 block">*Intensity: Low(1.0), Mod(1.5), High(2.0)</span>
-        </p>
-      </div>
+      
 
       {/* FEEDBACK FORM */}
       <div className="bg-zinc-900/50 border border-zinc-800 p-8 rounded-[2.5rem]">

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import { TrendingUp, Activity, Clock, Zap, ChevronRight, Dumbbell, Calendar, User } from 'lucide-react';
+import { TrendingUp, Activity, Clock, Zap, ChevronRight, Dumbbell, Calendar, User, Info } from 'lucide-react';
 import Link from 'next/link';
 import LogWorkout from '@/app/log-workout/page';
 import ReviewForm from '@/components/ReviewForm'; 
@@ -130,6 +130,18 @@ export default function ProfilePage() {
               <h3 className="text-4xl font-black uppercase italic leading-none">Power Score</h3>
               <div className="text-8xl font-black mt-2 tracking-tighter leading-none">{powerScore}</div>
             </div>
+            {/* POWER SCORE FORMULA CARD */}
+                  <div className="bg-orange-500/5 border border-orange-500/20 p-6 rounded-[2rem]">
+                    <div className="flex items-center gap-2 mb-3 text-orange-500">
+                      <Info size={16} />
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">The Power Formula</span>
+                    </div>
+                    <p className="text-[11px] text-zinc-400 leading-relaxed font-medium">
+                      <span className="text-white font-bold">Score</span> = (Duration × Intensity) + (Calories × 0.1)
+                      <br />
+                      <span className="text-zinc-600 italic mt-1 block">*Intensity: Low(1.0), Mod(1.5), High(2.0)</span>
+                    </p>
+                  </div>
           </div>
 
         </div>
