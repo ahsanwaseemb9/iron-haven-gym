@@ -47,7 +47,7 @@ export default function ProfilePage() {
       setLoading(false);
     };
     fetchData();
-    
+
     return () => {
     const autoLogout = async () => {
       await supabase.auth.signOut();
@@ -68,10 +68,10 @@ export default function ProfilePage() {
   );
 
   return (
-    <div className="min-h-screen bg-black text-white pt-32 pb-20 px-6">
+    <div className="min-h-screen bg-black text-white w-full">
       <div className="max-w-7xl mx-auto">
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="max-w-7xl mx-auto px-4 py-10">
           <h1 className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter">
             THE <span className="text-orange-500">VAULT</span>
           </h1>
@@ -124,8 +124,8 @@ export default function ProfilePage() {
           </div>
 
           {/* POWER SCORE */}
-          <div className="space-y-6">
-            <div className="bg-orange-500 p-10 rounded-[3rem] text-black shadow-xl shadow-orange-500/10">
+          <div className="space-y-9">
+            <div className="bg-orange-500 p-9 rounded-[0rem] text-black shadow-xl shadow-orange-500/10">
               <TrendingUp size={32} className="mb-4" />
               <h3 className="text-4xl font-black uppercase italic leading-none">Power Score</h3>
               <div className="text-8xl font-black mt-2 tracking-tighter leading-none">{powerScore}</div>
@@ -135,22 +135,27 @@ export default function ProfilePage() {
         </div>
       </div>
 {/* Vertical Stack Container */}
-<div className="flex flex-col gap-6 mt-12 max-w-[800px] mx-auto px-4">
+{/* mx-auto centers it, w-full ensures it uses all space on mobile, lg:max-w-[800px] limits it on desktop */}
+<div className="flex flex-col gap-6 mt-8 w-full max-w-[95%] lg:max-w-[800px] mx-auto px-2 sm:px-4">
   
-  {/* 1. Performance Log - Rectangular */}
-  <section className="border border-zinc-800 rounded-xl p-5 w-full bg-zinc-900/20">
+  {/* 1. Performance Log */}
+  <section className="border border-zinc-800 rounded-xl p-4 sm:p-6 w-full bg-zinc-900/20">
     <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 mb-4">
       Performance Tracking
     </h3>
-    <LogWorkout user={user} />
+    <div className="w-full">
+      <LogWorkout user={user} />
+    </div>
   </section>
 
-  {/* 2. Review Form - Rectangular */}
-  <section className="border border-zinc-800 rounded-xl p-5 w-full bg-zinc-900/20">
+  {/* 2. Review Form */}
+  <section className="border border-zinc-800 rounded-xl p-4 sm:p-6 w-full bg-zinc-900/20">
     <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 mb-4">
       Member Feedback
     </h3>
-    <ReviewForm />
+    <div className="w-full">
+      <ReviewForm />
+    </div>
   </section>
 
 </div>
